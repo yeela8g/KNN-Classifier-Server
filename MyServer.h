@@ -7,6 +7,7 @@
 #include <cstring>
 #include "CLI.h"
 #include <iostream>
+#include <pthread.h>
 
 #define MAX_CLIENT 5
 

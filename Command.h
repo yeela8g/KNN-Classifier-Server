@@ -5,10 +5,9 @@
 
 class Command{
     protected:
-        std::string description;
         SocketIO sio;
     public:
+        std::string description;
         virtual void excecute(int secondSock) = 0;
-        virtual std::string getDescription() = 0;
 };
 #endif
