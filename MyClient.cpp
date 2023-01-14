@@ -27,8 +27,8 @@ void MyClient::communicate(std::string ip,int port){
     while (1){
         for(int i=0;i<2;i++){ // change to 7 !!!!!!!!!!
             std::cout<<sio.read(sock); // print welcome 1,2,3,4,5 and 8
+            sio.write("got one", sock);
         }
-        std::cout << "client asked to choose number"<<std::endl;
         std::string data;
         std::getline(std::cin,data);
         while (data != "1" && data != "2" && data != "3" && data != "4" && data != "5" && data != "8"){
@@ -38,8 +38,6 @@ void MyClient::communicate(std::string ip,int port){
         if(send(sock,data.c_str(),strlen(data.c_str()),0) < 0) {//send input to server
             perror("error sending message to client");
         }
-        std::cout<<"sending message to server"<<std::endl;
-
         switch (std::stoi(data)) {
             case 1:
                 manageUploadCommunication(sock);
@@ -48,8 +46,7 @@ void MyClient::communicate(std::string ip,int port){
                 
                 break;
             case 3:
-                
-                break;
+                                break;
             case 4:
             
                 break;
@@ -57,11 +54,11 @@ void MyClient::communicate(std::string ip,int port){
                 
                 break;
             case 8:
-
+                close(sock);
+                exit(0);
             break;
         }
     }
-    close(sock);
 }
 
  void MyClient::manageUploadCommunication(int socket){
@@ -84,12 +81,12 @@ void MyClient::uploadToServer(int socket){
     }
     std::string file_name = path;
     std::ifstream in_file(file_name,std::ios::binary);
-    sio.write(file_name,socket); // send file name
     char buffer[BUFFERSIZE];
     while(in_file){
         memset(buffer,0,BUFFERSIZE);
         in_file.read(buffer,BUFFERSIZE);
         sio.write(buffer,socket);
+        std::cout << "server downloading.." << std::endl;
     }
     in_file.close();
 }
