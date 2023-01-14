@@ -43,14 +43,10 @@ void MyServer::communicate(){
             continue;
         }
         threads.emplace_back(&CLI::start, cli, secondSock);//remeber to close secondSock in the end!!!!!!!!
-    }
-
-
-
-
-
-
-
-
-
+        
+    } 
+    if (close(sock) < 0){ // close the main socket
+            perror("ERROR - closing client-specific socket failed: ");
+            exit(1);
+        }
 }

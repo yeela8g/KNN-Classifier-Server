@@ -1,23 +1,20 @@
 #include "Upload.h"
-#include <fstream>
+
 
 Upload::Upload(){
     description = "1. upload an unclassified csv data file/n";
 }
 
-std::string Upload::getDescription(){
-    return description;
-}
-
 void Upload::excecute(int secondSock){
     sio.write("Please upload your local train CSV file.", secondSock);//write to client
     readFileDownload(secondSock); //read file - download it
-    sio.write("Upload complete.\n", secondSock);//write to client
+    sio.write("Upload complete.", secondSock);//write to client
     sio.write("Please upload your local test CSV file.", secondSock);//write to client
     readFileDownload(secondSock);//read file - download it
 }
 
 void Upload::readFileDownload(int secondSock){
+    std::cout<<"got path" <<std::endl;
     std::string file_name(sio.read(secondSock)); //get file_name
     std::ofstream out_file(file_name, std::ios::binary); //open file "file_name"
     if(!out_file.is_open()) {

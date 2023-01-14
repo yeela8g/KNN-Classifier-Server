@@ -1,11 +1,14 @@
+#include <unistd.h>
 #include "SocketIO.h"
 #include "Command.h"
 #include "Upload.h"
+#include <vector>
+
 
 
 class CLI{
     private:
-        Command* commands[1]; //change to five!!!!!
+        std::vector<Command*> commands;
         SocketIO sockIO;
     public:
         CLI();
