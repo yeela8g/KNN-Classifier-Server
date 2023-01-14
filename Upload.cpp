@@ -2,7 +2,7 @@
 
 
 Upload::Upload(){
-    description = "1. upload an unclassified csv data file/n";
+    description = "1. upload an unclassified csv data file\n";
 }
 
 void Upload::excecute(int secondSock){
@@ -16,11 +16,13 @@ void Upload::excecute(int secondSock){
 void Upload::readFileDownload(int secondSock){
     std::cout<<"got path" <<std::endl;
     std::string file_name(sio.read(secondSock)); //get file_name
+    std::cout<<"server got file_name" <<std::endl;
     std::ofstream out_file(file_name, std::ios::binary); //open file "file_name"
     if(!out_file.is_open()) {
         perror("Error opening file ");
         return;
     }
+    std::cout<<"server opened name_file" <<std::endl;
     char buffer[BUFFERSIZE];
     while(1){
         memset(buffer, 0, BUFFERSIZE);
