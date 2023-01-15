@@ -25,10 +25,8 @@ void MyClient::communicate(std::string ip,int port){
     }
     std::cout<<"connect to server"<<std::endl;
     while (1){
-        for(int i=0;i<2;i++){ // change to 7 !!!!!!!!!!
-            std::cout<<sio.read(sock); // print welcome 1,2,3,4,5 and 8
-            sio.write("got one", sock);
-        }
+        std::cout<<sio.read(sock); // print welcome+menu
+        sio.write("got one", sock);
         std::string data;
         std::getline(std::cin,data);
         while (data != "1" && data != "2" && data != "3" && data != "4" && data != "5" && data != "8"){
@@ -38,7 +36,7 @@ void MyClient::communicate(std::string ip,int port){
         if(send(sock,data.c_str(),strlen(data.c_str()),0) < 0) {//send input to server
             perror("error sending message to client");
         }
-        switch (std::stoi(data)) {
+        switch (std::stoi(data)){
             case 1:
                 manageUploadCommunication(sock);
                 break;
@@ -57,6 +55,7 @@ void MyClient::communicate(std::string ip,int port){
         }
     }
 }
+
 
  void MyClient::manageUploadCommunication(int socket){
     std::cout<<sio.read(socket)<<std::endl; // server ask to upload 
@@ -88,7 +87,6 @@ void MyClient::uploadToServer(int socket){
         std::cout << "client sent buffer.." << std::endl;
     }
     in_file.close();
-    //sio.read(socket);
 }
 
 

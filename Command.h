@@ -4,9 +4,9 @@
 #include <string>
 
 class Command{
-    protected:
-        SocketIO sio;
+   
     public:
+        SocketIO sio;
         std::string description;
         virtual void excecute(int secondSock) = 0;
 };
