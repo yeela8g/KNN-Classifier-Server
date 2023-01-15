@@ -25,8 +25,12 @@ void MyClient::communicate(std::string ip,int port){
     }
     std::cout<<"connect to server"<<std::endl;
     while (1){
-        std::cout<<sio.read(sock); // print welcome+menu
+        std::cout<<sio.read(sock); // print welcome
         sio.write("got one", sock);
+        for (int i=0 ;i<2;i++){ // change to 5!!!!!!!!!!!!!!!!!
+            std::cout<<sio.read(sock); // print menu
+            sio.write("got one", sock);
+        }
         std::string data;
         std::getline(std::cin,data);
         while (data != "1" && data != "2" && data != "3" && data != "4" && data != "5" && data != "8"){
@@ -41,6 +45,7 @@ void MyClient::communicate(std::string ip,int port){
                 manageUploadCommunication(sock);
                 break;
             case 2:
+                manageKnnParameters(sock);
                 break;
             case 3:
                 break;
@@ -87,6 +92,63 @@ void MyClient::uploadToServer(int socket){
         std::cout << "client sent buffer.." << std::endl;
     }
     in_file.close();
+}
+
+void MyClient::manageKnnParameters(int socket){
+    std::cout<<sio.read(socket); // print The current KNN parameters
+    std::string input;
+    std::getline(std::cin,input);
+    if(input.length() == 0){ // if the client press enter return to menu
+        return;
+    }
+    // separet the string to K and matric
+    std::vector<std::string> separatedStr;
+    std::stringstream ss(input);  //wrapping line for the getline function
+    std::string word;
+    while(std::getline(ss, word, ' ')){  //separetad each line by comma into the container
+        separatedStr.push_back(word);
+        std::cout<<"word:"<<word<<"is"<<std::endl;
+    }
+    std::cout<<"size():"<<separatedStr.size()<<std::endl;
+    if (separatedStr.size() < 2){
+        std::cout<<"invalid input"<<std::endl;
+        sio.write("0",socket);
+        // acknowledge  sio.read(socket)!!!!!!!!!
+        std::cout<<sio.read(socket)<<std::endl;
+        return;
+    }
+    bool kFlag =1;
+    InputValidation in;
+    in.isNumber(separatedStr[0]);//valid k
+    if (in.getValid()== false){
+        kFlag = 0;
+    } else {
+        if(std::stoi(separatedStr[0])!= std::stod(separatedStr[0])){//check k is integer
+            kFlag = 0;
+        }
+        if (std::stoi(separatedStr[0])<1){ //check k is 1+
+            kFlag = 0;
+        }
+    }
+    if (!kFlag){
+        std::cout<<"invalid value for k"<<std::endl;
+    }
+    bool matricFlag = 1;
+     if(separatedStr[1]!="AUC" && separatedStr[1]!="CHB" && separatedStr[1]!="CAN" && separatedStr[1]!="MIN" && separatedStr[1]!="MAN"){
+        matricFlag = 0;
+        std::cout<<"invalid value for metric"<<std::endl;
+    }
+    if(!kFlag || !matricFlag){
+        std::cout<<"return to menu"<<std::endl;
+        sio.write("0",socket);
+        sio.read(socket);// acknowledge
+        return;
+    }
+    sio.write("1",socket);
+    sio.read(socket);// acknowledge
+    sio.write(separatedStr[0],socket); // send K
+    sio.read(socket);// acknowledge
+    sio.write(separatedStr[1],socket); // send matric
 }
 
 

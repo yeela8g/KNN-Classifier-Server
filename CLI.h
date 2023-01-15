@@ -4,6 +4,7 @@
 #include "Command.h"
 #include "Upload.h"
 #include <vector>
+#include "SettingsKnn.h"
 
 
 
