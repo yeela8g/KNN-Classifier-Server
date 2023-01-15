@@ -11,17 +11,13 @@ CLI::CLI(){
 
 void CLI::start(int secondSock){
     while(1){
-        //add more
         sockIO.write("Welcome to the KNN classifier Server. Please choose an option:\n", secondSock);
-        std::cout<<sockIO.read(secondSock)<<std::endl; // message acknowledge
+        sockIO.read(secondSock); // message acknowledge
         for(int i=0;i<commands.size();i++){
-            std::cout<<"in the loop"<<std::endl;
             sockIO.write(commands[i]->description,secondSock); // print the menu
             sockIO.read(secondSock);//message acknowledge of Menu.
         }
-        std::cout<<"after the loop"<<std::endl;
         std::string input = sockIO.read(secondSock);//read option answer
-        //add more
         if(input=="8"){
             break;
         }
@@ -37,6 +33,7 @@ void CLI::start(int secondSock){
     remove(trainFile.c_str());
     remove(testFile.c_str());
 }
+
 
 CLI::~CLI(){
     for(auto& command : commands)
