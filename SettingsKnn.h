@@ -1,5 +1,7 @@
 #include "Command.h"
 #include <iostream>
+#include <unistd.h>
+
 
 class SettingsKnn : public Command{
     private:

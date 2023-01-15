@@ -8,16 +8,16 @@ SettingsKnn::SettingsKnn(){
 }
 void SettingsKnn::excecute(int secondSock){
     sio.write("The current KNN parameters are: K = " + std::to_string(k) + ", distance metric = " + matric + "\n", secondSock);
-    std::string flag = sio.read(secondSock);
-    std::cout<<"flag:"<<flag<<std::endl;
-    sio.write("flag accepted",secondSock); //acknowledge
+    std::string flag = sio.read(secondSock);//get flag if params ok
+    sio.write("flag accepted",secondSock); //flag acknowledge
     if(flag == "0"){
+        sleep(1);
         return;
     }
-    std::string newK = sio.read(secondSock);
+    std::string newK = sio.read(secondSock);//reak k from client
     k = std::stoi(newK);
-    sio.write("k accepted",secondSock);
-    std::string newMatric = sio.read(secondSock);
+    sio.write("k accepted",secondSock); //acknowledge k
+    std::string newMatric = sio.read(secondSock);//read metric from client
     matric = newMatric;
 }
 int SettingsKnn::getK(){

@@ -96,28 +96,27 @@ void MyClient::uploadToServer(int socket){
 
 void MyClient::manageKnnParameters(int socket){
     std::cout<<sio.read(socket); // print The current KNN parameters
-    std::string input;
+    std::string input; //get input for changing+for what or not changing the parameters
     std::getline(std::cin,input);
-    if(input.length() == 0){ // if the client press enter return to menu
+    if(input.empty()){ // if the client press enter return to menu
+        sio.write("0",socket);
+        sio.read(socket);
         return;
     }
     // separet the string to K and matric
     std::vector<std::string> separatedStr;
     std::stringstream ss(input);  //wrapping line for the getline function
     std::string word;
-    while(std::getline(ss, word, ' ')){  //separetad each line by comma into the container
+    while(std::getline(ss, word, ' ')){  //separetad each line by space into the container
         separatedStr.push_back(word);
-        std::cout<<"word:"<<word<<"is"<<std::endl;
     }
-    std::cout<<"size():"<<separatedStr.size()<<std::endl;
-    if (separatedStr.size() < 2){
+    if (separatedStr.size() < 2){//less arguments entered
         std::cout<<"invalid input"<<std::endl;
         sio.write("0",socket);
-        // acknowledge  sio.read(socket)!!!!!!!!!
-        std::cout<<sio.read(socket)<<std::endl;
+        sio.read(socket);
         return;
     }
-    bool kFlag =1;
+    bool kFlag = 1; //check k is number,integer and 1+
     InputValidation in;
     in.isNumber(separatedStr[0]);//valid k
     if (in.getValid()== false){
@@ -133,13 +132,12 @@ void MyClient::manageKnnParameters(int socket){
     if (!kFlag){
         std::cout<<"invalid value for k"<<std::endl;
     }
-    bool matricFlag = 1;
+    bool matricFlag = 1; //check valid metric
      if(separatedStr[1]!="AUC" && separatedStr[1]!="CHB" && separatedStr[1]!="CAN" && separatedStr[1]!="MIN" && separatedStr[1]!="MAN"){
         matricFlag = 0;
         std::cout<<"invalid value for metric"<<std::endl;
     }
     if(!kFlag || !matricFlag){
-        std::cout<<"return to menu"<<std::endl;
         sio.write("0",socket);
         sio.read(socket);// acknowledge
         return;
