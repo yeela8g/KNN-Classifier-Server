@@ -1,3 +1,5 @@
+#ifndef InputValidation_H_
+#define InputValidation_H_
 #include "Dist.h"
 #include <stdexcept>
 #include <fstream>
@@ -18,3 +20,4 @@ public:
     bool validVectorMatricK(std::string (&vectorMatricK)[3]); //valid the 3 components from the user input
 
 };
+#endif

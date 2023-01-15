@@ -27,7 +27,7 @@ void MyClient::communicate(std::string ip,int port){
     while (1){
         std::cout<<sio.read(sock); // print welcome
         sio.write("got one", sock);
-        for (int i=0 ;i<2;i++){ // change to 5!!!!!!!!!!!!!!!!!
+        for (int i=0 ;i<3;i++){ // change to 5!!!!!!!!!!!!!!!!!
             std::cout<<sio.read(sock); // print menu
             sio.write("got one", sock);
         }
@@ -48,6 +48,7 @@ void MyClient::communicate(std::string ip,int port){
                 manageKnnParameters(sock);
                 break;
             case 3:
+                std::cout<<sio.read(sock)<<std::endl;
                 break;
             case 4:
                 break;
@@ -62,7 +63,7 @@ void MyClient::communicate(std::string ip,int port){
 }
 
 
- void MyClient::manageUploadCommunication(int socket){
+void MyClient::manageUploadCommunication(int socket){
     std::cout<<sio.read(socket)<<std::endl; // server ask to upload 
     uploadToServer(socket); // upload to server
     std::cout<<sio.read(socket)<<std::endl; // upload complet

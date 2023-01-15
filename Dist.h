@@ -1,3 +1,5 @@
+#ifndef Dist_H_
+#define Dist_H_
 #include "Vector.h"
 
 class Dist{
@@ -11,3 +13,4 @@ class Dist{
         double MinkowskiDistance(Vector v1, Vector v2, double pVal);  // (sum [|xi-yi|^p])^ 1/p
        
 };
+#endif

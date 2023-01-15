@@ -5,6 +5,7 @@
 #include "Upload.h"
 #include <vector>
 #include "SettingsKnn.h"
+#include "Classify.h"
 
 
 
