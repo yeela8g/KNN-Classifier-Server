@@ -6,32 +6,34 @@
 CLI::CLI(){
     commands.push_back(new Upload); 
     //add more:
-
 }
 
 void CLI::start(int secondSock){
     while(1){
-        //print welcome message
-        sockIO.write("Welcome to the KNN classifier Server. Please choose an option:\n", secondSock);
-        sockIO.read(secondSock);
-        //go thorough all description and write them
-        for(int i=0;i < commands.size();i++){
+        sockIO.write("Welcome to the KNN classifier Server. Please choose an option:\n", secondSock);//print welcome message
+        sockIO.read(secondSock);//message acknowledge-1
+        for(int i=0;i < commands.size();i++){//go through all description and write them
+            std::cout<< commands[i]->description << std::endl;
             sockIO.write(commands[i]->description, secondSock);
+            sockIO.read(secondSock);//message acknowledge-2
         }
-        sockIO.read(secondSock);
-        //read answer
-        std::string input = sockIO.read(secondSock);
+        std::string input = sockIO.read(secondSock);//read option answer
         if(input=="8"){
             break;
         }
-        //excecute the relevant command - sending the secondsock
-        int index = input[0]-'0'-1;
+        int index = input[0]-'0'-1;//excecute the relevant command - sending the secondsock
         commands[index]->excecute(secondSock);
     }
     if (close(secondSock) < 0){ //close connection eith this client and connect to new client
             perror("ERROR - closing client-specific socket failed: ");
             exit(1);
         }
+    std::string trainFile = "out1" + std::to_string(secondSock)+"train"; //delete the files after client disconnected.
+    std::string testFile = "out1" + std::to_string(secondSock)+"test";
+    remove(trainFile.c_str());
+    remove(testFile.c_str());
+
+    
 }
 
 CLI::~CLI(){

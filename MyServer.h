@@ -13,7 +13,6 @@
 
 class MyServer{
     private:
-        std::vector<std::thread> threads;
         int port;
         CLI cli;
     public:

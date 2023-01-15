@@ -36,12 +36,11 @@ void MyServer::communicate(){
             exit(1);
         }
         std::cout << "accepted clinet.." << std::endl;
-        /*
-        std::thread t(&CLI::start, cli, secondSock);//send thread to excecutr cli.start
+        
+        std::thread t(&CLI::start, cli, secondSock);//send thread to excecute cli.start()
         t.detach();
-        */
-        threads.emplace_back(&CLI::start, cli, secondSock);//remeber to close secondSock in the end!!!!!!!!
-    } 
+    }
+
     if (close(sock) < 0){ // close the main socket
             perror("ERROR - closing client-specific socket failed: ");
             exit(1);
