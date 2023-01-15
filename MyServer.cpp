@@ -36,14 +36,11 @@ void MyServer::communicate(){
             exit(1);
         }
         std::cout << "accepted clinet.." << std::endl;
-        std::cout << "number of threads in list: "<< threads.size() << std::endl;
-        if(threads.size() >= MAX_CLIENT){
-            perror("Too many clients. connection denied");
-            close(secondSock);
-            continue;
-        }
+        /*
+        std::thread t(&CLI::start, cli, secondSock);//send thread to excecutr cli.start
+        t.detach();
+        */
         threads.emplace_back(&CLI::start, cli, secondSock);//remeber to close secondSock in the end!!!!!!!!
-        
     } 
     if (close(sock) < 0){ // close the main socket
             perror("ERROR - closing client-specific socket failed: ");
