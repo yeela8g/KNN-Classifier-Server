@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <cstdio>
 #include "SocketIO.h"
 #include "Command.h"
 #include "Upload.h"

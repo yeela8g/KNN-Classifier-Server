@@ -19,7 +19,7 @@ void MyClient::communicate(std::string ip,int port){
     if (inet_aton(ip.c_str(), &clientAdress.sin_addr) == 0){
         throw std::invalid_argument("IP Address is not valid");
     }
-    if (connect(sock, (struct sockaddr *)&clientAdress, sizeof(clientAdress)) < 0){//concect to server
+    if (connect(sock, (struct sockaddr *)&clientAdress, sizeof(clientAdress)) < 0){//connect to server
         perror("Could not connect to server");
         exit(1);
     }
@@ -43,15 +43,12 @@ void MyClient::communicate(std::string ip,int port){
                 manageUploadCommunication(sock);
                 break;
             case 2:
-                
                 break;
             case 3:
-                                break;
+                break;
             case 4:
-            
                 break;
             case 5:
-                
                 break;
             case 8:
                 close(sock);
@@ -65,6 +62,7 @@ void MyClient::communicate(std::string ip,int port){
     std::cout<<sio.read(socket)<<std::endl; // server ask to upload 
     uploadToServer(socket); // upload to server
     std::cout<<sio.read(socket)<<std::endl; // upload complet
+    sio.write("got msg complet download file1",socket);
     std::cout<<sio.read(socket)<<std::endl;// server ask to upload test CSV 
     uploadToServer(socket);
 }
@@ -73,8 +71,9 @@ void MyClient::uploadToServer(int socket){
     std::string path;
     std::getline(std::cin,path);
     struct stat st;
-    int status = stat(path.c_str(), &st);
-    while (status == -1) {
+    int status = 0;
+    status = stat(path.c_str(), &st);
+    while(status == -1){
         std::cout << "The path is not legal" << std::endl;
         std::getline(std::cin,path);
         status = stat(path.c_str(), &st);
@@ -86,9 +85,10 @@ void MyClient::uploadToServer(int socket){
         memset(buffer,0,BUFFERSIZE);
         in_file.read(buffer,BUFFERSIZE);
         sio.write(buffer,socket);
-        std::cout << "server downloading.." << std::endl;
+        std::cout << "client sent buffer.." << std::endl;
     }
     in_file.close();
+    //sio.read(socket);
 }
 
 
