@@ -7,7 +7,10 @@
 #include "SocketIO.h"
 #include <fstream>
 #include <sys/stat.h>
-
+#include <list>
+#include <sstream>
+#include <vector>
+#include"InputValidation.h"
 
 #define BUFFERSIZE 4096
 
@@ -19,5 +22,6 @@ public:
     void communicate(std::string ip,int port);
     void uploadToServer(int socket);
     void manageUploadCommunication(int socket);
+    void manageKnnParameters(int socket);
 
 };

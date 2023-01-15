@@ -5,22 +5,28 @@
 
 CLI::CLI(){
     commands.push_back(new Upload); 
+    commands.push_back(new SettingsKnn); 
     //add more:
 }
 
 void CLI::start(int secondSock){
     while(1){
         //add more
-        sockIO.write("Welcome to the KNN classifier Server. Please choose an option:\n1. upload an unclassified csv data file\n", secondSock);
-        sockIO.read(secondSock);//message acknowledge of Menu.
+        sockIO.write("Welcome to the KNN classifier Server. Please choose an option:\n", secondSock);
+        std::cout<<sockIO.read(secondSock)<<std::endl; // message acknowledge
+        for(int i=0;i<commands.size();i++){
+            std::cout<<"in the loop"<<std::endl;
+            sockIO.write(commands[i]->description,secondSock); // print the menu
+            sockIO.read(secondSock);//message acknowledge of Menu.
+        }
+        std::cout<<"after the loop"<<std::endl;
         std::string input = sockIO.read(secondSock);//read option answer
         //add more
-        if(input == "1"){
-            Upload upload;
-            upload.excecute(secondSock);
-        }else if(input=="8"){
+        if(input=="8"){
             break;
         }
+        int index = input[0]-'0'-1;
+        commands[index]->excecute(secondSock);
     }
     if (close(secondSock) < 0){ //close connection eith this client and connect to new client
             perror("ERROR - closing client-specific socket failed: ");
@@ -31,7 +37,6 @@ void CLI::start(int secondSock){
     remove(trainFile.c_str());
     remove(testFile.c_str());
 }
-
 
 CLI::~CLI(){
     for(auto& command : commands)

@@ -14,7 +14,6 @@
 class MyServer{
     private:
         int port;
-        CLI cli;
     public:
         MyServer(int prt);
         void communicate();

@@ -37,7 +37,7 @@ void MyServer::communicate(){
         }
         std::cout << "accepted clinet.." << std::endl;
         
-        std::thread t(&CLI::start, cli, secondSock);//send thread to excecute cli.start()
+        std::thread t(&CLI::start, new CLI, secondSock);//send thread to excecute cli.start()
         t.detach();
     }
 
