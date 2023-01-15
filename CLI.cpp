@@ -13,8 +13,7 @@ void CLI::start(int secondSock){
         sockIO.write("Welcome to the KNN classifier Server. Please choose an option:\n", secondSock);//print welcome message
         sockIO.read(secondSock);//message acknowledge-1
         for(int i=0;i < commands.size();i++){//go through all description and write them
-            std::cout<< commands[i]->description << std::endl;
-            sockIO.write(commands[i]->description, secondSock);
+            sockIO.write("1. upload an unclassified csv data file\n", secondSock);
             sockIO.read(secondSock);//message acknowledge-2
         }
         std::string input = sockIO.read(secondSock);//read option answer
@@ -33,7 +32,6 @@ void CLI::start(int secondSock){
     remove(trainFile.c_str());
     remove(testFile.c_str());
 
-    
 }
 
 CLI::~CLI(){
