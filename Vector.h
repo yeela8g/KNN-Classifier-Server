@@ -1,3 +1,5 @@
+#ifndef Vector_H_
+#define Vector_H_
 #include <vector>
 #include <string>
 #include <sstream>
@@ -16,3 +18,4 @@ class Vector{
         double absValDist(Vector v2, double p); //sum(|p-q|^p)^(1/p), p is constant static member of vector class 
         Vector absValSubtract(Vector v1); ///this function returns one abs subtraction (-) Vector --> v = |v1 - v2|;
 };
+#endif
