@@ -34,7 +34,7 @@ void MyServer::communicate(){
         }
         
         std::thread t(&CLI::start, new CLI, secondSock);//send thread to excecute cli.start()
-        t.detach();
+        t.detach(); //keep to the next client
     }
 
     if (close(sock) < 0){ // close the main socket

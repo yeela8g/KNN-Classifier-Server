@@ -8,7 +8,6 @@ CLI::CLI(){
     commands.push_back(new SettingsKnn); 
     commands.push_back(new Classify);
     commands.push_back(new Send);
-    //add more:
 }
 
 void CLI::start(int secondSock){
@@ -24,10 +23,10 @@ void CLI::start(int secondSock){
         sockIO.write("5. download results\n8. exit\n",secondSock); // print the menu
         sockIO.read(secondSock);//message acknowledge of Menu.
         std::string input = sockIO.read(secondSock);//read option answer
-        if(input=="8"){
+        if(input=="8"){ //close this client connection=socket and kill the thread
             break;
         }
-        int index = input[0]-'0'-1;
+        int index = input[0]-'0'-1; //commands 4+5 excecute the same
         if(index == 4){
             index = 3;
         }

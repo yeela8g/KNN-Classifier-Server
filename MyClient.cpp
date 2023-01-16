@@ -31,7 +31,7 @@ void MyClient::communicate(std::string ip,int port){
         }
 
         std::string data;
-        std::getline(std::cin,data);
+        std::getline(std::cin,data);//get option choise from user.
         while (data != "1" && data != "2" && data != "3" && data != "4" && data != "5" && data != "8"){
             std::cout <<"invalid input"<<std::endl;
             std::getline(std::cin,data);
@@ -42,25 +42,25 @@ void MyClient::communicate(std::string ip,int port){
 
         switch (std::stoi(data)){
             case 1:
-                manageUploadCommunication(sock);
+                manageUploadCommunication(sock);//uplode csv files
                 break;
             case 2:
-                manageKnnParameters(sock);
+                manageKnnParameters(sock); //set parameter of the knn algorithm
                 break;
             case 3:
-                std::cout<<sio.read(sock)<<std::endl;
+                std::cout<<sio.read(sock)<<std::endl; //classify vectors
                 break;
             case 4:
-                getClassifications(sock);
+                getClassifications(sock); //get classificasion from server
                 break;
             case 5:
             {
-                std::thread t(&MyClient::downloadClassifications,this,sock);//send thread to download classifications File
-                t.join();
+                std::thread t(&MyClient::downloadClassifications,this,sock);//send thread to download classifications File to the user computer
+                t.join(); //avoiding overriding the file data with the menu data 
                 break;
             }
             case 8:
-                close(sock);
+                close(sock); //disconnect from server
                 exit(0);
             break;
         }
@@ -88,7 +88,7 @@ void MyClient::manageUploadCommunication(int socket){
     }
 }
 
-bool MyClient::checkPath(int socket ,std::string &path){
+bool MyClient::checkPath(int socket ,std::string &path){ //check path is valid
     std::getline(std::cin,path);
     struct stat st;
     int status = 0;
@@ -100,7 +100,7 @@ bool MyClient::checkPath(int socket ,std::string &path){
     return 1;
 }
 
-void MyClient::uploadToServer(int socket,std::string path){
+void MyClient::uploadToServer(int socket,std::string path){ //send the this path file to the server
     std::string file_name = path;
     std::ifstream in_file(file_name,std::ios::binary);
     char buffer[BUFFERSIZE];
@@ -112,7 +112,7 @@ void MyClient::uploadToServer(int socket,std::string path){
     in_file.close();
 }
 
-void MyClient::manageKnnParameters(int socket){
+void MyClient::manageKnnParameters(int socket){ 
     std::cout<<sio.read(socket); // print The current KNN parameters
     std::string input; //get input for changing+for what or not changing the parameters
     std::getline(std::cin,input);

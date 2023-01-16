@@ -14,7 +14,7 @@ void Classify::setK(int newK){
 }
 
 void Classify::excecute(int secondSock){
-    featuresLabelsArr[0].clear();
+    featuresLabelsArr[0].clear();//reset the classified and unclassified vectors containers
     featuresLabelsArr[1].clear();
     featuresOnly.clear();
 

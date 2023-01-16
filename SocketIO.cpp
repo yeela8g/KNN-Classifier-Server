@@ -2,7 +2,7 @@
 
 SocketIO::SocketIO(){}
 
-std::string SocketIO::read(int secondSock){
+std::string SocketIO::read(int secondSock){ //read data sent from client over the socket
     char buffer[BUFFERSIZE]; //create string to contain the message from client
     memset(buffer, 0, BUFFERSIZE); //initiation
     int read_bytes = recv(secondSock,buffer,sizeof(buffer),0); // get message
@@ -16,7 +16,7 @@ std::string SocketIO::read(int secondSock){
 }
 
 
-void SocketIO::write(std::string reply, int secondSock){
+void SocketIO::write(std::string reply, int secondSock){//send data to client over the socket
     int sent_bytes = send(secondSock,reply.c_str(),reply.size(),0);//send response
     if (sent_bytes < 0){
         perror("error sending to client");

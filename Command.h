@@ -6,8 +6,8 @@
 class Command{
    
     public:
-        SocketIO sio;
-        std::string description;
-        virtual void excecute(int secondSock) = 0;
+        SocketIO sio; //object to write and read over the socket
+        std::string description; //description of the command
+        virtual void excecute(int secondSock) = 0; //excecute the command
 };
 #endif

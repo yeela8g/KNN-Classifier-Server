@@ -6,10 +6,10 @@ Upload::Upload(){
 }
 
 void Upload::excecute(int secondSock){
-    sio.write("Please upload your local train CSV file.", secondSock);//write to client
-    std::string fileFlag = sio.read(secondSock);
+    sio.write("Please upload your local train CSV file.", secondSock);//write to client to send its files
+    std::string fileFlag = sio.read(secondSock); //check if the files sent as requiered
     if(fileFlag == "0"){
-        sleep(1);
+        sleep(1); //something wrong the the files (invalid path)
         return;
     }
     sio.write("got upload",secondSock); // if the path is okay
