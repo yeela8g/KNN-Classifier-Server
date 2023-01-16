@@ -52,8 +52,6 @@ void Classify::excecute(int secondSock){
         fileEmpty = 0;
         i++;
     }
-    std::string endFile= "Done.";
-    out_file.write(endFile.c_str(),endFile.size());
     out_file.close();
     if(fileEmpty){ // if there is no exist neighbor or neighbors less than k.
         sio.write("invalid input",secondSock);
