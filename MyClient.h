@@ -10,6 +10,7 @@
 #include <list>
 #include <sstream>
 #include <vector>
+#include <thread>
 #include"InputValidation.h"
 
 #define BUFFERSIZE 4096
@@ -24,5 +25,6 @@ public:
     void manageUploadCommunication(int socket);
     void manageKnnParameters(int socket);
     void getClassifications(int socket);
+    void downloadClassifications(int socket);
 
 };

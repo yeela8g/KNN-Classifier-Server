@@ -51,10 +51,15 @@ void MyClient::communicate(std::string ip,int port){
                 std::cout<<sio.read(sock)<<std::endl;
                 break;
             case 4:
+                std::cout<<"case 4"<<std::endl;
                 getClassifications(sock);
                 break;
             case 5:
+            {
+                std::thread t(&MyClient::downloadClassifications,this,sock);//send thread to excecute cli.start()
+                t.detach();
                 break;
+            }
             case 8:
                 close(sock);
                 exit(0);
@@ -157,7 +162,7 @@ void MyClient::getClassifications(int socket){
         std::cout<<feedback<<std::endl;
         return;
     }
-    sio.write("feedbake accepted",socket);
+    sio.write("feedback accepted",socket);
     char buffer[BUFFERSIZE];
     while(1){
         memset(buffer, 0, BUFFERSIZE);
@@ -174,11 +179,52 @@ void MyClient::getClassifications(int socket){
         }
         std::cout<<buffer; //write 4096 bytes = full size
     }
+    std::cout<<"Done."<<std::endl;
     std::string input; //get input for changing+for what or not changing the parameters
     std::getline(std::cin,input);
     while(!input.empty()){ // if the client press enter return to menu
         std::getline(std::cin,input);
     }
+}
 
+
+void MyClient::downloadClassifications(int socket){
+    std::string feedback = sio.read(socket); // if the server is going to dend classifications
+    if(feedback != "1"){
+        std::cout<<feedback<<std::endl;
+        return;
+    }
+    sio.write("feedback accepted",socket);
+    std::cout<<"please enter path"<<std::endl;
+    std::string file_path;
+    std::getline(std::cin,file_path);
+    std::ofstream out_file(file_path, std::ios::binary); //open file "outFile_name"
+    if(!out_file.is_open()) {
+        perror("Error opening file ");
+        return;
+    }
+    char buffer[BUFFERSIZE];
+    while(1){
+        memset(buffer, 0, BUFFERSIZE);
+        int bytes_received = recv(socket,buffer, BUFFERSIZE, 0);
+        std::cout<< "bytes_received" << bytes_received << std::endl;
+        if(bytes_received == 0){  // Read no bytes - either connection has closed or client taking too long // Let's exit
+            break; 
+        } else if (bytes_received<0){
+            perror("Error reading from Upload command secondSocket");
+            exit(1);
+        }else if (bytes_received < BUFFERSIZE){
+            out_file.write(buffer, bytes_received); //write last bytes < 4096 bytes
+            break;
+        }
+        out_file.write(buffer, bytes_received); //write 4096 bytes = full size
+    }
+    out_file.close();
+
+    std::string input; //get input for changing+for what or not changing the parameters
+    std::getline(std::cin,input);
+    while(!input.empty()){ // if the client press enter return to menu
+        std::getline(std::cin,input);
+    }
 }
 

@@ -39,5 +39,4 @@ void Upload::readFileDownload(int secondSock, std::string fileType){
         out_file.write(buffer, bytes_received); //write 4096 bytes = full size
     }
     out_file.close();
-    //sio.write("server finish downloading the file", secondSock);
  }
