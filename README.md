@@ -42,5 +42,5 @@ for running the server:
 ### $./Client.out [ip] [port]
 >for example:
 
--![image](https://user-images.githubusercontent.com/118124478/212755447-02a25d6f-1075-4b06-9a0a-0504f8eba303.png)
+![image](https://user-images.githubusercontent.com/118124478/212755447-02a25d6f-1075-4b06-9a0a-0504f8eba303.png)
 
