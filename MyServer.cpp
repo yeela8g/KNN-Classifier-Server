@@ -11,7 +11,6 @@ void MyServer::communicate(){
         perror("couldn't create socket");
         exit(1);
     }
-    std::cout << "created main socket" << std::endl;
     struct sockaddr_in serverAdress; //create server address details struct
     memset(&serverAdress,0, sizeof(serverAdress));
     serverAdress.sin_family = AF_INET;
@@ -21,12 +20,10 @@ void MyServer::communicate(){
         perror("error binding socket");
         exit(1);
     }
-    std::cout << "binded port to socket" << std::endl;
     if(listen(sock,MAX_CLIENT)<0){ // listen up to 5 clients
         perror("error accepting client");
         exit(1);
     }
-    std::cout << "listening to socket.." << std::endl;
     while (1){
         struct sockaddr_in clientAddress;
         unsigned int client_addr_len = sizeof(clientAddress);
@@ -35,7 +32,6 @@ void MyServer::communicate(){
             perror("error accepting client");
             exit(1);
         }
-        std::cout << "accepted clinet.." << std::endl;
         
         std::thread t(&CLI::start, new CLI, secondSock);//send thread to excecute cli.start()
         t.detach();
