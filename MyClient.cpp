@@ -31,6 +31,7 @@ void MyClient::communicate(std::string ip,int port){
             std::cout<<sio.read(sock); // print menu
             sio.write("got one", sock);
         }
+
         std::string data;
         std::getline(std::cin,data);
         while (data != "1" && data != "2" && data != "3" && data != "4" && data != "5" && data != "8"){
@@ -40,6 +41,7 @@ void MyClient::communicate(std::string ip,int port){
         if(send(sock,data.c_str(),strlen(data.c_str()),0) < 0) {//send input to server
             perror("error sending message to client");
         }
+
         switch (std::stoi(data)){
             case 1:
                 manageUploadCommunication(sock);
@@ -51,13 +53,15 @@ void MyClient::communicate(std::string ip,int port){
                 std::cout<<sio.read(sock)<<std::endl;
                 break;
             case 4:
-                std::cout<<"case 4"<<std::endl;
                 getClassifications(sock);
                 break;
             case 5:
             {
-                std::thread t(&MyClient::downloadClassifications,this,sock);//send thread to excecute cli.start()
-                t.detach();
+                std::cout<<"please enter path"<<std::endl;
+                std::string file_path;
+                std::getline(std::cin,file_path);
+                std::thread t(&MyClient::downloadClassifications,this,sock,file_path);//send thread to download classifications File
+                t.join();
                 break;
             }
             case 8:
@@ -85,7 +89,7 @@ void MyClient::uploadToServer(int socket){
     int status = 0;
     status = stat(path.c_str(), &st);
     while(status == -1){
-        std::cout << "The path is not legal" << std::endl;
+        std::cout << "invalid input" << std::endl;
         std::getline(std::cin,path);
         status = stat(path.c_str(), &st);
     }
@@ -167,7 +171,6 @@ void MyClient::getClassifications(int socket){
     while(1){
         memset(buffer, 0, BUFFERSIZE);
         int bytes_received = recv(socket,buffer, BUFFERSIZE, 0);
-        std::cout<< "bytes_received" << bytes_received << std::endl;
         if(bytes_received == 0){  // Read no bytes - either connection has closed or client taking too long // Let's exit
             break; 
         } else if (bytes_received<0){
@@ -179,6 +182,7 @@ void MyClient::getClassifications(int socket){
         }
         std::cout<<buffer; //write 4096 bytes = full size
     }
+    sio.write("file accepted",socket); // feedbake from the client
     std::cout<<"Done."<<std::endl;
     std::string input; //get input for changing+for what or not changing the parameters
     std::getline(std::cin,input);
@@ -187,22 +191,18 @@ void MyClient::getClassifications(int socket){
     }
 }
 
-
-void MyClient::downloadClassifications(int socket){
+void MyClient::downloadClassifications(int socket, std::string file_path){
+    std::ofstream out_file(file_path, std::ios::binary); //open file "outFile_name"
+    if(!out_file.is_open()) {
+        perror("Error opening file ");
+        exit(1);
+    }
     std::string feedback = sio.read(socket); // if the server is going to dend classifications
     if(feedback != "1"){
         std::cout<<feedback<<std::endl;
         return;
     }
     sio.write("feedback accepted",socket);
-    std::cout<<"please enter path"<<std::endl;
-    std::string file_path;
-    std::getline(std::cin,file_path);
-    std::ofstream out_file(file_path, std::ios::binary); //open file "outFile_name"
-    if(!out_file.is_open()) {
-        perror("Error opening file ");
-        return;
-    }
     char buffer[BUFFERSIZE];
     while(1){
         memset(buffer, 0, BUFFERSIZE);
@@ -220,11 +220,6 @@ void MyClient::downloadClassifications(int socket){
         out_file.write(buffer, bytes_received); //write 4096 bytes = full size
     }
     out_file.close();
-
-    std::string input; //get input for changing+for what or not changing the parameters
-    std::getline(std::cin,input);
-    while(!input.empty()){ // if the client press enter return to menu
-        std::getline(std::cin,input);
-    }
+    sio.write("file accepted",socket); // feedbake from the client that the file accepted.
 }
 
