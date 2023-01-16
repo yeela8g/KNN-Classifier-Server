@@ -1,7 +1,7 @@
 # Ex4 - Multi-threaded KNN server-client model
 ---
 ## Description
-The purpose of this repository is to implement KNN server in multi-threaded model who can treat clients simultaneously. 
+The purpose of this repository is implementing KNN server in multi-threaded model for simultaneously clients treating. 
 
 the server program input is:
 - port
