@@ -1,10 +1,10 @@
 All : Server Client clean
 
 Server: DefaultIO.o Command.o Server.o MyServer.o CLI.o SocketIO.o Upload.o SettingsKnn.o Classify.o GetInput.o InputValidation.o Dist.o Vector.o Knn.o Send.o
-		g++ Server.o MyServer.o CLI.o SocketIO.o Upload.o SettingsKnn.o Classify.o GetInput.o InputValidation.o Dist.o Vector.o Knn.o Send.o -o Server.out
+		g++ -pthread Server.o MyServer.o CLI.o SocketIO.o Upload.o SettingsKnn.o Classify.o GetInput.o InputValidation.o Dist.o Vector.o Knn.o Send.o -o Server.out
 
 Client: DefaultIO.o Client.o MyClient.o SocketIO.o InputValidation.o Dist.o Vector.o 
-		g++ Client.o MyClient.o SocketIO.o InputValidation.o Dist.o Vector.o -o Client.out
+		g++ -pthread Client.o MyClient.o SocketIO.o InputValidation.o Dist.o Vector.o -o Client.out
 
 Command.o: Command.h
 	g++ -std=c++11 -pthread -c Command.h 
