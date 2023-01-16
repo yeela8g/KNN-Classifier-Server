@@ -17,7 +17,7 @@ void Send::excecute(int secondSock){
         return;
     }
     sio.write("1",secondSock); // send flag that the server is about to send the data. 
-    sio.read(secondSock); // feedbake from the client
+    sio.read(secondSock); // feedback from the client
     std::ifstream in_file(outFile_name,std::ios::binary);
     char buffer[BUFFERSIZE];
     while(in_file){
@@ -26,5 +26,6 @@ void Send::excecute(int secondSock){
         sio.write(buffer,secondSock);
     }
     in_file.close();
+    sio.read(secondSock); // feedback from the client that the file accepted.
 
 }
