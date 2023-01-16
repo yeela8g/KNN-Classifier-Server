@@ -7,6 +7,7 @@ CLI::CLI(){
     commands.push_back(new Upload); 
     commands.push_back(new SettingsKnn); 
     commands.push_back(new Classify);
+    commands.push_back(new Send);
     //add more:
 }
 
@@ -20,11 +21,16 @@ void CLI::start(int secondSock){
             sockIO.write(commands[i]->description,secondSock); // print the menu
             sockIO.read(secondSock);//message acknowledge of Menu.
         }
+        sockIO.write("5. download results\n8. exit\n",secondSock); // print the menu
+        sockIO.read(secondSock);//message acknowledge of Menu.
         std::string input = sockIO.read(secondSock);//read option answer
         if(input=="8"){
             break;
         }
         int index = input[0]-'0'-1;
+        if(index == 4){
+            index = 3;
+        }
         commands[index]->excecute(secondSock);
         if(index == 1){
             classify->setMatric(setting->getMatric()); // update the matric for knn

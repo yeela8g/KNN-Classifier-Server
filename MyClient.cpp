@@ -27,7 +27,7 @@ void MyClient::communicate(std::string ip,int port){
     while (1){
         std::cout<<sio.read(sock); // print welcome
         sio.write("got one", sock);
-        for (int i=0 ;i<3;i++){ // change to 5!!!!!!!!!!!!!!!!!
+        for (int i=0 ;i<5;i++){ 
             std::cout<<sio.read(sock); // print menu
             sio.write("got one", sock);
         }
@@ -51,6 +51,7 @@ void MyClient::communicate(std::string ip,int port){
                 std::cout<<sio.read(sock)<<std::endl;
                 break;
             case 4:
+                getClassifications(sock);
                 break;
             case 5:
                 break;
@@ -150,4 +151,34 @@ void MyClient::manageKnnParameters(int socket){
     sio.write(separatedStr[1],socket); // send matric
 }
 
+void MyClient::getClassifications(int socket){
+    std::string feedback = sio.read(socket); // if the server is going to dend classifications
+    if(feedback != "1"){
+        std::cout<<feedback<<std::endl;
+        return;
+    }
+    sio.write("feedbake accepted",socket);
+    char buffer[BUFFERSIZE];
+    while(1){
+        memset(buffer, 0, BUFFERSIZE);
+        int bytes_received = recv(socket,buffer, BUFFERSIZE, 0);
+        std::cout<< "bytes_received" << bytes_received << std::endl;
+        if(bytes_received == 0){  // Read no bytes - either connection has closed or client taking too long // Let's exit
+            break; 
+        } else if (bytes_received<0){
+            perror("Error reading from Upload command secondSocket");
+            exit(1);
+        }else if (bytes_received < BUFFERSIZE){
+            std::cout<<buffer; //write last bytes < 4096 bytes
+            break;
+        }
+        std::cout<<buffer; //write 4096 bytes = full size
+    }
+    std::string input; //get input for changing+for what or not changing the parameters
+    std::getline(std::cin,input);
+    while(!input.empty()){ // if the client press enter return to menu
+        std::getline(std::cin,input);
+    }
+
+}
 

@@ -6,6 +6,7 @@
 #include <vector>
 #include "SettingsKnn.h"
 #include "Classify.h"
+#include "Send.h"
 
 
 

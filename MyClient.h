@@ -23,5 +23,6 @@ public:
     void uploadToServer(int socket);
     void manageUploadCommunication(int socket);
     void manageKnnParameters(int socket);
+    void getClassifications(int socket);
 
 };
