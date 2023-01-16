@@ -32,14 +32,12 @@ void Classify::excecute(int secondSock){
     std::string outFile_name = "out1" + std::to_string(secondSock) + "testClassified";
     if(access(outFile_name.c_str(), F_OK) != -1) {// File exists, so delete it
         remove(outFile_name.c_str());
-        std::cout<<"file already exist. delete it"<<std::endl;
     }
     std::ofstream out_file(outFile_name, std::ios::binary); //open file "outFile_name"
     if(!out_file.is_open()) {
         perror("Error opening file ");
         return;
     }
-    std::cout<<"server opened name_file" <<std::endl;
     bool fileEmpty = 1;//flag to checks if some classificasions inserted to the file during the loop
     int i = 1;//counting number of classify
     for(std::list<std::string>::iterator itrX = featuresOnly.begin(); itrX != featuresOnly.end(); itrX++){
@@ -47,7 +45,7 @@ void Classify::excecute(int secondSock){
         if(label == "k too big"){
             continue;
         }
-        label = std::to_string(i) + " " + label + "\n";
+        label = std::to_string(i) + "   " + label + "\n";
         out_file.write(label.c_str(), label.size());
         fileEmpty = 0;
         i++;

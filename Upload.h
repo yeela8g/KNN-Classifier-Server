@@ -3,6 +3,8 @@
 #include <iostream>
 #include <thread>
 #include <sstream>
+#include <unistd.h>
+
 #define BUFFERSIZE 4096
 
 class Upload: public Command{

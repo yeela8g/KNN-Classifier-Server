@@ -24,10 +24,11 @@ private:
 public:
     MyClient();//constructor
     void communicate(std::string ip,int port);
-    void uploadToServer(int socket);
+    void uploadToServer(int socket,std::string path);
+    bool checkPath(int socket, std::string &path);
     void manageUploadCommunication(int socket);
     void manageKnnParameters(int socket);
     void getClassifications(int socket);
-    void downloadClassifications(int socket,std::string file_path);
+    void downloadClassifications(int socket);
 
 };

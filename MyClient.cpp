@@ -11,7 +11,6 @@ void MyClient::communicate(std::string ip,int port){
         perror("couldn't create socket");
         exit(1);
     }
-    std::cout<<"created socket"<<std::endl;
     struct sockaddr_in clientAdress; //create client address details struct
     memset(&clientAdress,0, sizeof(clientAdress));
     clientAdress.sin_family = AF_INET;
@@ -23,7 +22,6 @@ void MyClient::communicate(std::string ip,int port){
         perror("Could not connect to server");
         exit(1);
     }
-    std::cout<<"connect to server"<<std::endl;
     while (1){
         std::cout<<sio.read(sock); // print welcome
         sio.write("got one", sock);
@@ -57,10 +55,7 @@ void MyClient::communicate(std::string ip,int port){
                 break;
             case 5:
             {
-                std::cout<<"please enter path"<<std::endl;
-                std::string file_path;
-                std::getline(std::cin,file_path);
-                std::thread t(&MyClient::downloadClassifications,this,sock,file_path);//send thread to download classifications File
+                std::thread t(&MyClient::downloadClassifications,this,sock);//send thread to download classifications File
                 t.join();
                 break;
             }
@@ -75,24 +70,37 @@ void MyClient::communicate(std::string ip,int port){
 
 void MyClient::manageUploadCommunication(int socket){
     std::cout<<sio.read(socket)<<std::endl; // server ask to upload 
-    uploadToServer(socket); // upload to server
-    std::cout<<sio.read(socket)<<std::endl; // upload complet
-    sio.write("got msg complet download file1",socket);
-    std::cout<<sio.read(socket)<<std::endl;// server ask to upload test CSV 
-    uploadToServer(socket);
+    std::string path;
+    bool FileFlag = checkPath(socket,path);
+    sio.write(std::to_string(FileFlag),socket);
+    if(FileFlag){
+        sio.read(socket); // acknowledge
+        uploadToServer(socket,path); // upload to server
+        std::cout<<sio.read(socket)<<std::endl; // upload complet
+        sio.write("got msg complet download file1",socket);// acknowledge
+        std::cout<<sio.read(socket)<<std::endl;// server ask to upload test CSV 
+        FileFlag = checkPath(socket,path);
+        sio.write(std::to_string(FileFlag),socket);
+        if(FileFlag){
+            sio.read(socket);// acknowledge
+            uploadToServer(socket,path);
+        }
+    }
 }
 
-void MyClient::uploadToServer(int socket){
-    std::string path;
+bool MyClient::checkPath(int socket ,std::string &path){
     std::getline(std::cin,path);
     struct stat st;
     int status = 0;
     status = stat(path.c_str(), &st);
-    while(status == -1){
+    if(status == -1){
         std::cout << "invalid input" << std::endl;
-        std::getline(std::cin,path);
-        status = stat(path.c_str(), &st);
+        return 0;
     }
+    return 1;
+}
+
+void MyClient::uploadToServer(int socket,std::string path){
     std::string file_name = path;
     std::ifstream in_file(file_name,std::ios::binary);
     char buffer[BUFFERSIZE];
@@ -100,7 +108,6 @@ void MyClient::uploadToServer(int socket){
         memset(buffer,0,BUFFERSIZE);
         in_file.read(buffer,BUFFERSIZE);
         sio.write(buffer,socket);
-        std::cout << "client sent buffer.." << std::endl;
     }
     in_file.close();
 }
@@ -191,23 +198,24 @@ void MyClient::getClassifications(int socket){
     }
 }
 
-void MyClient::downloadClassifications(int socket, std::string file_path){
-    std::ofstream out_file(file_path, std::ios::binary); //open file "outFile_name"
-    if(!out_file.is_open()) {
-        perror("Error opening file ");
-        exit(1);
-    }
+void MyClient::downloadClassifications(int socket){
     std::string feedback = sio.read(socket); // if the server is going to dend classifications
     if(feedback != "1"){
         std::cout<<feedback<<std::endl;
         return;
     }
     sio.write("feedback accepted",socket);
+    std::string file_path;
+    std::getline(std::cin,file_path);
+    std::ofstream out_file(file_path, std::ios::binary); //open file "outFile_name"
+    if(!out_file.is_open()) {
+        perror("Error opening file ");
+        exit(1);
+    }
     char buffer[BUFFERSIZE];
     while(1){
         memset(buffer, 0, BUFFERSIZE);
         int bytes_received = recv(socket,buffer, BUFFERSIZE, 0);
-        std::cout<< "bytes_received" << bytes_received << std::endl;
         if(bytes_received == 0){  // Read no bytes - either connection has closed or client taking too long // Let's exit
             break; 
         } else if (bytes_received<0){

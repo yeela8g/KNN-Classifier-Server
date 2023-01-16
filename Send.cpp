@@ -8,12 +8,12 @@ void Send::excecute(int secondSock){
     std::string outFile_name = "out1" + std::to_string(secondSock) + "testClassified"; // classified file to send
     if(access(file_test_name.c_str(), F_OK) == -1) {// if test File doesn't exists
         sio.write("please upload data",secondSock);
-        sleep(1);
+        sleep(3);
         return;
     }
     if(access(outFile_name.c_str(), F_OK) == -1) {// if test File doesn't exists
         sio.write("please classify the data",secondSock);
-        sleep(1);
+        sleep(3);
         return;
     }
     sio.write("1",secondSock); // send flag that the server is about to send the data. 
