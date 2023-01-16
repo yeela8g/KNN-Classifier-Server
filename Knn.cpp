@@ -41,8 +41,8 @@ std::string Knn::predict(){
         std::list<double> SortedDistanceMetx = distanceMetx; // creating a copy distance list for saving the original list order 
         SortedDistanceMetx.sort();
         std::list<double>::iterator itrSortedD = SortedDistanceMetx.begin(); //initiate iterator on copied distance list
-        std::list<std::string>::iterator itrY = yList.begin();//initiate iterator on label list
         for (int i = 0; i < k ;i++){ // pull the labels of the k closest sampels
+            std::list<std::string>::iterator itrY = yList.begin();//initiate iterator on label list
             for(std::list<double>::iterator itrD = distanceMetx.begin(); itrD != distanceMetx.end(); itrD++){
                 if (*itrD==*itrSortedD) {
                     closestKlableArr[i]=*itrY;

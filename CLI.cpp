@@ -37,8 +37,10 @@ void CLI::start(int secondSock){
     }
     std::string trainFile = "out1" + std::to_string(secondSock)+"train"; //delete the files after client disconnected.
     std::string testFile = "out1" + std::to_string(secondSock)+"test";
+    std::string classifyFile = "out1" + std::to_string(secondSock) + "testClassified";
     remove(trainFile.c_str());
     remove(testFile.c_str());
+    remove(classifyFile.c_str());
 }
 
 

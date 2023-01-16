@@ -84,6 +84,9 @@ bool GetInput::fileInputClassified(std::string myFile, std::list<std::string> (&
     std::list<std::string> separatedLine; //vector to separate thef eatures from the label in one line
     std::string line;
     while(std::getline(inputFile,line)){ //get one sample (features+label)
+        if(line.back() == '\r'){
+            line.pop_back();
+        }
         std::stringstream ss(line);  //wrapping line for the getline function
         std::string word;
         separatedLine.clear(); //intiation of line container
