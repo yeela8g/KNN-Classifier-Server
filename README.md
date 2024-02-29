@@ -1,5 +1,4 @@
 # Ex4 - Multi-threaded KNN server-client model
----
 ## Description
 The purpose of this repository is implementing KNN server in multi-threaded model for simultaneously clients treating. 
 
@@ -31,16 +30,21 @@ When a client connects to the knn server, the server introduce the program menu 
 - if the connection for some reason fails, error message will be presented and the client and server programs will be closed.
 - for Option two: assuming that for edit the knn parameters client insert k and than the metric, separated with space. 
 
-## How to use
->for running on university u2 server use the commands:
+## How to use (running on university u2 server)
 
-for running the server:
-### $make
-### $./Server.out [port]
++ for running the server:
 
->and for running the client:
-### $./Client.out [ip] [port]
->for example:
+```
+$make
+$./Server.out [port]
+```
+
++ and for running the client:
+
+```
+$./Client.out [ip] [port]
+```
+for example:
 
 ![image](https://user-images.githubusercontent.com/118124478/212755447-02a25d6f-1075-4b06-9a0a-0504f8eba303.png)
 
