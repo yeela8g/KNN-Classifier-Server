@@ -22,7 +22,7 @@ To run the KNN Classifier, you need to execute both the client and the server pr
 
 **Note**: In case of connection failures, appropriate error messages will be displayed, and both client and server programs will be closed.
 
-examples:
+_examples_
 
 ![image](https://github.com/yeela8g/Ex4/assets/118124478/78eec261-3ba5-49f3-9203-82c5efb226fc)
 
@@ -39,12 +39,6 @@ Upon launching the client program, you will be presented with a menu to choose f
 4. **Get Classifications**: Retrieve display of the classification results from the server.
 5. **Download Results**: Download the classified data from the server to your local machine.
 8. **Exit**: Terminate the connection with the server and exit the client program. 
-
-## UML Diagram
-
-The UML diagram below illustrates the key classes and their relationships in the KNN Classifier project.
-
-[Insert UML Diagram Image Here]
 
 ## Programming Principles
 
@@ -63,6 +57,8 @@ The KNN Classifier project adheres to several programming principles to ensure r
 The KNN Classifier incorporates various optimizations to enhance performance and maintainability. These optimizations include:
 
 - **Command Pattern**: The Command design pattern is employed to encapsulate various actions the users chooses as objects. Each action\command is represented by a concrete class that implements a common interface, typically containing an execute() method. These command objects enable flexible and extensible execution of actions within the system. For example, commands such as uploading data, configuring KNN settings, classifying data, and displaying results are encapsulated as separate command objects. By decoupling the invoker (CLI) from the receiver (concrete command classes), the Command Pattern promotes modular design and facilitates the addition of new commands without modifying existing code. This pattern enhances code maintainability and scalability by providing a clear separation of concerns and promoting code reuse.
+
+![image](https://github.com/yeela8g/Ex4/assets/118124478/c6a785b3-03a1-4a24-92ec-cd81e2a5e695)
 
 - **Input Validation**: Input validation is performed using a dedicated class (`InputValidation`), ensuring that all user inputs values and files are adjusted and  ensures that input data meets specified criteria. The validation checks include verifying the equality in the vectors size, preventing zero division,
 ensuring non-empty vectors, and validating numeric input.
